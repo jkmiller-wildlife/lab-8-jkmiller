@@ -1,0 +1,10 @@
+---
+title: "Lab 8 - LInear Regression in R"
+author: "Jamie K. Miller"
+date: "November 23, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
