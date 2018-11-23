@@ -1,4 +1,3 @@
----
 title: "Lab 8 - LInear Regression in R"
 author: "Jamie K. Miller"
 date: "November 23, 2018"
@@ -8,3 +7,65 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r, include = FALSE}
+### Load Packages
+
+library(tidyverse)
+
+```
+
+```{r, include = FALSE}
+### Read in data and data source
+
+salmon <- read_csv("salmon.csv")
+
+# Loaded file with  obs of 2 variables
+
+# Source: 
+# Aquaculture Trade tables
+# U.S. imports and exports of fish and shellfish that may be products of aquaculture.
+# All years and all countries
+# Created November 5, 2018
+# Updates of this data can be found at http://www.ers.usda.gov/data-products/aquaculture-data.aspx
+
+```
+
+```{r}
+### 4. Exploratory scatterplot
+
+scatter_salmon <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+  geom_point()
+scatter_salmon
+
+# The plot looks like a linear relationship. The residuals will probably be normally distributed.
+
+```
+
+```{r}
+### 5. Linear Regression in R
+# Linear regression of total trend in the colume of fresh salmon imported to the U.S. from 1990 to 2017.
+
+salmon_model <- lm(salmon_fresh ~ year, data = salmon)
+salmon_model
+
+# Imports(tons) = -14982940 + 7550(Year)
+
+# On average the annual imports
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
