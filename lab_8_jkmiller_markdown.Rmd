@@ -1,4 +1,4 @@
-title: "Lab 8 - LInear Regression in R"
+title: "Lab 8 - Linear Regression in R"
 author: "Jamie K. Miller"
 date: "November 23, 2018"
 output: html_document
@@ -20,7 +20,7 @@ library(tidyverse)
 
 salmon <- read_csv("salmon.csv")
 
-# Loaded file with  obs of 2 variables
+# Loaded file with 28 obs of 2 variables
 
 # Source: 
 # Aquaculture Trade tables
@@ -51,17 +51,74 @@ salmon_model
 
 # Imports(tons) = -14982940 + 7550(Year)
 
-# On average the annual imports
+# On average the annual imports increase by 7550 each year. The y-intercept is -14982940 which means at year 0 the average annual imports were almost -15 million tons. Extrapolating for past values requires a starting point where 7550(Year) > -14982940.
 
 ```
 
 
+```{r}
+### 6. Model Diagnostics
 
+par(mfrow = c(2,2))
+plot(salmon_model)
 
+```
 
+```{r}
+### 7. Explore model fit and significance
 
+summary(salmon_model)
 
+# Year does significantly predict salmon inports because p < 0.001.
+# The R-squared values means 94.78% of the variance in salmon exports and be explained by year.
+# 5.22% of variance in salmon exports is NOT explained by year. Since there is only one predictor variable, we use Multiple R-squared, rather than adjusted R-squared.
 
+```
+
+```{r}
+### 8. Prepare a final graph
+
+salmon_final_graph <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") + # Shaded area is std error of 95% CI. Size is line width.
+  theme_bw() +
+  scale_x_continuous(expand = c(0,0), limits = c(1990, 2017)) +
+  labs(x = "Year", y = "U.S. Annual Fresh Salmon Imports\n(1,000 pounds)")
+
+salmon_final_graph
+
+```
+
+```{r}
+### 9. Make prediction using the model
+# Make predictions of U.S. fresh salmon imports for years 2022, 2024, 2026, and 2028.
+
+# Create new dataframe with function 'data.frame()'.
+
+new_years <- data.frame(year = c(2022, 2024, 2026, 2028))
+
+# Make predictions about that new using our existing model with the 'predict()' function.
+
+future_predict <- predict(salmon_model, newdata = new_years, interval = "confidence")
+future_predict
+
+# Bind the prediction outcomes of the new dataframe and predictions into a new dataframe that can be used for graphs and/or tables.
+
+predictions <- data.frame(new_years, future_predict)
+predictions 
+
+```
+
+```{r}
+### 10. Find Pearson's r (correlation)
+
+pearsons_r <- cor.test(salmon$year, salmon$salmon_fresh)
+pearsons_r
+
+# Pearson's r is 0.9735 which is a strong correlation.
+```
+
+Year significactly predicts U.S. fresh salmon imports (*b* = 7550, t(26) = 21.7, *p* <0.001) with a strong correlation between the two (Pearson's r = 0.97). The overall model (Imports = 7550(Year) - 1.498e+07; in years and tons, respectively) explains a significant amount of variance in sepal width (F(1,26) = 471.9, *p* < 0.001, R^2^ = 0.95).
 
 
 
